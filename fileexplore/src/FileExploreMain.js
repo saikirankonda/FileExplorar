@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-function FileExploreMain({ exploteData, addFolder, setExploreData }) {
+function FileExploreMain({ exploteData }) {
   const [expand, setExpand] = useState(false);
 
   const expandFunc = () => {
@@ -22,9 +22,6 @@ function FileExploreMain({ exploteData, addFolder, setExploreData }) {
   };
 
   const handleCreateFolder = (e, id, items, folder) => {
-    console.log("checkid", exploteData?.id, id);
-    console.log("items", items);
-    // addFolder(e, id, items, folder);
     if (e.keyCode === 13 && e.target.value) {
       const newItem = {
         id: new Date().getTime().toString(),
@@ -44,8 +41,16 @@ function FileExploreMain({ exploteData, addFolder, setExploreData }) {
         {exploteData?.isFolder ? "📁" : "📄"} {exploteData?.name}
         {exploteData?.isFolder && (
           <div>
-            <button onClick={(e) => onCreateFolder(e, true)}>Folder +</button>
-            <button onClick={(e) => onCreateFolder(e, false)}>File +</button>
+            <button
+              onClick={(e) => onCreateFolder(e, true)}
+              style={{ border: "none" }}>
+              📁
+            </button>
+            <button
+              style={{ border: "none" }}
+              onClick={(e) => onCreateFolder(e, false)}>
+              📄
+            </button>
           </div>
         )}
       </div>
