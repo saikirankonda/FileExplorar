@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-function FileExploreMain({ explorer, addFolder }) {
+function FileExploreMain({ exploteData, addFolder, setExploreData }) {
   const [expand, setExpand] = useState(false);
 
   const expandFunc = () => {
@@ -21,13 +21,19 @@ function FileExploreMain({ explorer, addFolder }) {
     setShowInput({ ...showInput, visble: true, isFolder: isFolder });
   };
 
-  const handleCreateFolder = (e, id, items) => {
-    console.log("checkid", explorer?.id, id);
+  const handleCreateFolder = (e, id, items, folder) => {
+    console.log("checkid", exploteData?.id, id);
+    console.log("items", items);
+    // addFolder(e, id, items, folder);
     if (e.keyCode === 13 && e.target.value) {
-      if (explorer?.id === id && showInput?.isFolder) {
-        addFolder(e.target.value, true, [], id);
-        setShowInput({ ...showInput, visble: false });
-      }
+      const newItem = {
+        id: new Date().getTime().toString(),
+        name: e.target.value,
+        isFolder: folder,
+        items: []
+      };
+      const addNewFile = items?.items?.unshift(newItem);
+      setShowInput({ ...showInput, visble: false });
     }
   };
 
@@ -35,8 +41,8 @@ function FileExploreMain({ explorer, addFolder }) {
     <div>
       <div onClick={expandFunc} className="folder">
         {" "}
-        {explorer?.isFolder ? "📁" : "📄"} {explorer?.name}
-        {explorer?.isFolder && (
+        {exploteData?.isFolder ? "📁" : "📄"} {exploteData?.name}
+        {exploteData?.isFolder && (
           <div>
             <button onClick={(e) => onCreateFolder(e, true)}>Folder +</button>
             <button onClick={(e) => onCreateFolder(e, false)}>File +</button>
@@ -50,14 +56,19 @@ function FileExploreMain({ explorer, addFolder }) {
             <input
               type="text"
               onKeyDown={(e) => {
-                handleCreateFolder(e, explorer?.id, explorer);
+                handleCreateFolder(
+                  e,
+                  exploteData?.id,
+                  exploteData,
+                  showInput?.isFolder
+                );
               }}
             />
           </div>
         )}
-        {explorer?.items?.map((each, i) => (
+        {exploteData?.items?.map((each, i) => (
           <div className="file" style={{ marginLeft: "20px" }}>
-            <FileExploreMain explorer={each} key={i} />
+            <FileExploreMain exploteData={each} key={i} />
           </div>
         ))}
       </div>
